@@ -3,7 +3,7 @@ Aishiteru
 
 OpenFL gamedev tools.
 
-These are tools originally written in AIR/AS3 built expressly for our OpenFL game engine, which renders exclusively using graphics.drawTiles and graphics.drawTriangles. The goal is to switch this renderer out for an OpenGLView based one.
+These are tools originally written in AIR/AS3 built expressly for our OpenFL game engine, which renders exclusively using graphics.drawTiles and graphics.drawTriangles.
 
 They include 
 
