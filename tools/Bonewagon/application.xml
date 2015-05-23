@@ -1,32 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?> 
-<application xmlns="http://ns.adobe.com/air/application/3.5">
+<application xmlns="http://ns.adobe.com/air/application/17.0">
 	
-	<id>com.furusystems.games.editors.Bonewagon</id> 
-	<versionNumber>1.25</versionNumber> 
-	<filename>Bonewagon</filename> 
+	<id>bonewagon.BonewagonHX</id> 
+	<versionNumber>1.0</versionNumber> 
+	<filename>BonewagonHX</filename> 
 	
-	<name>Bonewagon</name> 
+	<name>BonewagonHX</name> 
 	<description></description> 
 	<copyright></copyright> 
 	
 	<initialWindow> 
-		<title>BONE WAGON</title> 
-		<content>Bonewagon.swf</content> 
+		<title>BonewagonHX</title> 
+		<content>BonewagonHX.swf</content> 
 		<systemChrome>standard</systemChrome> 
 		<transparent>false</transparent> 
 		<visible>true</visible> 
 		<minimizable>true</minimizable> 
 		<maximizable>true</maximizable> 
 		<resizable>true</resizable> 
-		<renderMode>direct</renderMode>
 	</initialWindow> 
-	<supportedProfiles>desktop extendedDesktop</supportedProfiles>
-	<icon> 
-		<image16x16>assets/glottis16.png</image16x16>
-		<image32x32>assets/glottis32.png</image32x32>
-		<image48x48>assets/glottis48.png</image48x48>
-		<image128x128>assets/glottis.png</image128x128>
-	</icon> 
+	
 	<!-- 
 	More options:
 	http://livedocs.adobe.com/flex/3/html/File_formats_1.html#1043413
