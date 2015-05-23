@@ -95,7 +95,7 @@ class ToolBar extends Sprite
 	
 	function onModelChange(flags:Int, data:Dynamic) 
 	{
-		if (flags & SharedModel.STRUCTURE != 0 || flags & SharedModel.META != 0) boneTree.items = [SharedModel.skeleton.toList()];
+		//if (flags & SharedModel.STRUCTURE != 0 || flags & SharedModel.META != 0) boneTree.items = [SharedModel.skeleton.toList()];
 		if (flags & SharedModel.META != 0 ||  flags & SharedModel.SELECTION != 0) {
 			if(SharedModel.skeleton.selectedBone!=null){
 				boneName.text = SharedModel.skeleton.selectedBone.name;
@@ -190,6 +190,7 @@ class ToolBar extends Sprite
 	function onOffsetChange(e:Event) 
 	{
 		if (SharedModel.selection == null) return;
+		/*
 		switch(e.currentTarget) {
 			case localOffsetX:
 				SharedModel.selection.localOffset.x = localOffsetX.value;
@@ -197,6 +198,7 @@ class ToolBar extends Sprite
 				SharedModel.selection.localOffset.y = localOffsetY.value;
 		}
 		SharedModel.onChanged.dispatch(SharedModel.ANIMATION, null);
+		*/
 	}
 	
 	function flipY(e:MouseEvent) 
@@ -243,6 +245,7 @@ class ToolBar extends Sprite
 	{
 		trace("GTS Selected");
 		var sheet:GTSSheet;
+		/*
 		if (GTSMap[gtsFile.nativePath] != null) {
 			sheet = GTSMap[gtsFile.nativePath];
 		}else {
@@ -257,9 +260,11 @@ class ToolBar extends Sprite
 		sheetPath.text = gtsFile.nativePath;
 		SharedModel.gtsPath = sheetPath.text;
 		
+		*/
+		
 		populateGTS();
 		
-		sequenceList.selectedIndex = 0;
+		//sequenceList.selectedIndex = 0;
 		var allBones:Array<Bone> = SharedModel.skeleton.listBones();
 		while (allBones.length > 0) {
 			var b:Bone = allBones.pop();
@@ -270,6 +275,7 @@ class ToolBar extends Sprite
 	
 	public function populateGTS() 
 	{
+		/*
 		sequenceList.removeAll();
 		sequenceList.addItem( { label:"n/a" } );
 		if (SharedModel.gts == null) return;
@@ -277,19 +283,20 @@ class ToolBar extends Sprite
 		{
 			sequenceList.addItem( { label:seq.name } );
 		}
+		*/
 	}
 	
 	function onSequenceSelect(e:Event) 
 	{
 		if (SharedModel.skeleton.selectedBone == null) return;
-		SharedModel.selection.gtsSequence = sequenceList.selectedItem.label;
+		//SharedModel.selection.gtsSequence = sequenceList.selectedItem.label;
 		SharedModel.selection.inheritOffset();
 		SharedModel.onChanged.dispatch(SharedModel.ANIMATION | SharedModel.BONES, ChangedData.next(SharedModel.selection.boneID));
 	}
 	
 	function onTfChange(e:Event) 
 	{
-		switch(e.currentTarget) {
+		/*switch(e.currentTarget) {
 			case boneDepth:
 				if (SharedModel.skeleton.selectedBone == null) return;
 				SharedModel.skeleton.selectedBone.z = boneDepth.value;
@@ -303,12 +310,12 @@ class ToolBar extends Sprite
 			case charNameField:
 				SharedModel.characterName = charNameField.text;
 		}
-		SharedModel.onChanged.dispatch(SharedModel.META, null);
+		SharedModel.onChanged.dispatch(SharedModel.META, null);*/
 	}
 	
 	function onKeyboardDown(e:KeyboardEvent) 
 	{
-		if (e.keyCode == Keyboard.ENTER) {
+		/*if (e.keyCode == Keyboard.ENTER) {
 			if (SharedModel.skeleton.selectedBone == null) return;
 			switch(e.currentTarget) {
 				case boneName:
@@ -319,7 +326,7 @@ class ToolBar extends Sprite
 					SharedModel.characterName = charNameField.text;
 			}
 			SharedModel.onChanged.dispatch(SharedModel.META, null);
-		}
+		}*/
 	}
 	
 	function handleTestTreeSelect(e:Event)
@@ -372,7 +379,7 @@ class ToolBar extends Sprite
 	
 	function onDiskopButton(e:Event = null) 
 	{
-		switch(e.currentTarget) {
+		/*switch(e.currentTarget) {
 			case newButton:
 				SharedModel.clear();
 			case loadButton:
@@ -384,7 +391,7 @@ class ToolBar extends Sprite
 			case exportButton:
 				var fr = new FileReference();
 				fr.save(SharedModel.export(), SharedModel.characterName + ".anims");
-		}
+		}*/
 	}
 	
 	function onLoadSelect(e:Event) 
@@ -393,7 +400,7 @@ class ToolBar extends Sprite
 		switch(loadType) {
 			case CHARACTER:
 				loadFR.load();
-				boneTree.selectedIndex = 0;
+				//boneTree.selectedIndex = 0;
 				SharedModel.skeleton.selectedBone = SharedModel.skeleton;
 			case ANIMATIONS:
 				loadFR.load();

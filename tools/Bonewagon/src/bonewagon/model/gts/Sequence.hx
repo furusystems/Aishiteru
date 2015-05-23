@@ -73,7 +73,7 @@ class Sequence
 	function getBiggestFrame():Tile 
 	{
 		trace("Get biggest frame");
-		var t:Tile;
+		var t:Tile = null;
 		var biggest = new Point(0, 0);
 		for(t2 in tiles) {
 			trace(t2.size.length, biggest.length);

@@ -41,6 +41,10 @@ class Main extends Sprite
 	
 	static var backgroundColors:Array<Int> = [0x333333, 0xFFFFFF, 0, 0x00FF00];
 	
+	public static function main() {
+		new Main();
+	}
+	
 	public function Main() 
 	{
 		stage.nativeWindow.addEventListener(Event.CLOSING, onWindowClosing);

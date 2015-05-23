@@ -167,8 +167,9 @@ class Timeline extends Sprite
 			//is there an existing srt at the current time?
 			var updated:Bool = false;
 			var ts = isBasePose?0:timeSeconds;
-			for (srt in existingTarget.srts) 
+			for (j in 0...existingTarget.srts.length) 
 			{
+				var srt = existingTarget.srts[j];
 				if (srt.time == ts) {
 					//update existing
 					srt = b.getSRT(ts);
