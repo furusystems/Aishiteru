@@ -4,6 +4,8 @@ import flash.geom.Matrix;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 import haxe.Json;
+
+using extensions.PNGTools;
 /**
  * ...
  * @author Andreas Rønning
@@ -72,7 +74,7 @@ class GTSSheet
 
 	public function getPng(scale:Float = 1):ByteArray 
 	{
-		return PNGEncoder.encode(getTexture(scale));
+		return getTexture(scale).toPngBytes();
 	}
 	public function getTexture(scale:Float = 1):BitmapData {
 		if (generatedTexture != null) return generatedTexture;

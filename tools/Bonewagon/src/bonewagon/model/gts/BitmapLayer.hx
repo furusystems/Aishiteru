@@ -13,6 +13,8 @@ import flash.utils.ByteArray;
 import fsignal.Signal;
 import fsignal.Signal1;
 import haxe.Json;
+
+using extensions.PNGTools;
 /**
  * ...
  * @author Andreas Rønning
@@ -31,7 +33,7 @@ class BitmapLayer extends Sprite
 		super();
 		this.sd = sd;
 		this.filename = filename;
-		bmd = PNGDecoder.decodeImage(textureData);
+		bmd = textureData.toPngBMD();
 		visible = false;
 	}
 	function onTextureLoaded(e:Event) 

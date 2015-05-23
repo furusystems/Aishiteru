@@ -72,6 +72,7 @@ class Timeline extends Sprite
 	
 	public function new(main:Main) 
 	{
+		super();
 		this.main = main;
 		var options:NativeWindowInitOptions = new NativeWindowInitOptions();
 		nw = new NativeWindow(options);
@@ -127,16 +128,16 @@ class Timeline extends Sprite
 	
 	function onModelChanged(flags:Int, data:Dynamic) 
 	{
-		if (flags & SharedModel.LOAD ||  flags & SharedModel.ANIMATION_LIST) {
+		if (flags & SharedModel.LOAD != 0||  flags & SharedModel.ANIMATION_LIST != 0) {
 			reinit();
 			return;
 		}
-		if (flags & SharedModel.ANIMATION_WEIGHT) {
+		if (flags & SharedModel.ANIMATION_WEIGHT != 0) {
 			drive();
 		}
 		if (SharedModel.playback.currentAnimation == null) return;
 		var newTargetCreated:Bool = false;
-		if (flags & SharedModel.BONES) {
+		if (flags & SharedModel.BONES != 0) {
 			trace("Bone changed: " + data);
 			playing = false;
 			var a:Animation = SharedModel.playback.currentAnimation;
@@ -154,7 +155,7 @@ class Timeline extends Sprite
 			if (existingTarget == null) {
 				//no target for bone, creating new
 				existingTarget = new AnimationTarget();
-				existingTarget.boneID = int(data);
+				existingTarget.boneID = Std.int(data);
 				a.targets.push(existingTarget);
 				newTargetCreated = true;
 				trace("creating new target"+existingTarget.getBone().name);
@@ -179,10 +180,10 @@ class Timeline extends Sprite
 			}
 			if(!updated) existingTarget.addSample(ts, b);
 		}
-		if (flags & SharedModel.META) {
+		if (flags & SharedModel.META != 0) {
 			updateNames();
 		}
-		if (flags & SharedModel.STRUCTURE || newTargetCreated) {
+		if (flags & SharedModel.STRUCTURE != 0 || newTargetCreated) {
 			rebuildTargets();
 		}
 		redraw();
@@ -329,7 +330,7 @@ class Timeline extends Sprite
 	
 	var copyBuffer:Array<SRT> = null;
 	public var main:Main;
-	var copyTime = -1;
+	var copyTime:Float = -1;
 	
 	function copyState() 
 	{
@@ -351,8 +352,8 @@ class Timeline extends Sprite
 	
 	function frameKeys() 
 	{
-		rangeSeconds.x = SharedModel.playback.currentAnimation.minTime;
-		rangeSeconds.y = SharedModel.playback.currentAnimation.maxTime;
+		rangeSeconds.x = SharedModel.playback.currentAnimation.getMinTime();
+		rangeSeconds.y = SharedModel.playback.currentAnimation.getMaxTime();
 		redraw();
 	}
 	
@@ -372,7 +373,7 @@ class Timeline extends Sprite
 		var keys:Array<SRT> = SharedModel.playback.currentAnimation.listKeys();
 		return keys.filter(keyTimeFilter);
 	}
-	function keyTimeFilter(item:SRT, index:Int, vector:Array<SRT>):Bool {
+	function keyTimeFilter(item:SRT):Bool {
 		return (item.time >= timeSeconds);
 	}
 	

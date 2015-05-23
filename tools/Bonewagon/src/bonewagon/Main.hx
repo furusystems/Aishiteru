@@ -138,13 +138,7 @@ class Main extends Sprite
 	
 	function setAnimation(name:String) 
 	{
-		//SharedModel.animations.single();
-		var c = SharedModel.animations.filter(function(a) return a.name.toLowerCase() == name.toLowerCase());
-		if (c.length > 0) {
-			SharedModel.playback.currentAnimation = c[0];
-			return;
-		}
-		SharedModel.playback.currentAnimation = null;
+		SharedModel.playback.currentAnimation = SharedModel.animations.single(function(f) return f.name.toLowerCase() == name.toLowerCase());
 	}
 	
 	

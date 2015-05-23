@@ -4,6 +4,8 @@ import flash.display.BitmapData;
 import flash.errors.Error;
 import flash.utils.ByteArray;
 import flash.utils.IDataInput;
+
+using extensions.PNGTools;
 /**
  * ...
  * @author Andreas Rønning
@@ -20,7 +22,7 @@ class GTSFormatter
 		{
 			out.writeShort(img.width); //image dims
 			trace("Adding texture bytes of size: " + img.width);
-			var bytes:ByteArray = PNGEncoder.encode(img);
+			var bytes:ByteArray = img.toPngBytes();
 			out.writeUnsignedInt(bytes.length); //image filesize
 			out.writeBytes(bytes, 0, bytes.length);
 		}

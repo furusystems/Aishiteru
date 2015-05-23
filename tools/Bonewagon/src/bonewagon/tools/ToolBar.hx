@@ -5,10 +5,12 @@ import bonewagon.model.gts.GTSSheet;
 import bonewagon.model.gts.Sequence;
 import bonewagon.model.SharedModel;
 import bonewagon.model.skeleton.Bone;
+import bonewagon.utils.ComponentFactory;
 import com.furusystems.fl.gui.Button;
 import com.furusystems.fl.gui.compound.Dropdown;
 import com.furusystems.fl.gui.compound.Stepper;
 import com.furusystems.fl.gui.compound.treeview.TreeView;
+import com.furusystems.fl.gui.HBox;
 import com.furusystems.fl.gui.Label;
 import com.furusystems.fl.gui.VBox;
 import flash.desktop.NativeApplication;
@@ -58,8 +60,8 @@ class ToolBar extends Sprite
 	var loadType:Int;
 	
 	public var nw:NativeWindow;
-	static var CHARACTER:Int = 0;
-	static var ANIMATIONS:Int = 1;
+	static inline var CHARACTER:Int = 0;
+	static inline var ANIMATIONS:Int = 1;
 	
 	public function ToolBar() 
 	{
@@ -120,7 +122,7 @@ class ToolBar extends Sprite
 						}
 						
 					}
-					sequenceList.selectedIndex = idx;
+					//sequenceList.selectedIndex = idx;
 					frameStepper.value = SharedModel.selection.gtsSequenceFrame;
 				}
 			}
@@ -131,7 +133,7 @@ class ToolBar extends Sprite
 	
 	function buildUI() 
 	{
-		mainContents = new VBox(stage,4,4);
+		/*mainContents = new VBox(stage,4,4);
 		charNameField = ComponentFactory.labelledLabel("Name: ", mainContents);
 		var label:Label = new Label(mainContents, 0, 0, "DiskOps");
 		var hbox:HBox = new HBox(mainContents);
@@ -145,8 +147,7 @@ class ToolBar extends Sprite
 		hbox = new HBox(mainContents);
 		sheetPath = ComponentFactory.labelledLabel("GTS Sheet path: ", hbox);
 		new Button(hbox, 0, 0, "load").addEventListener(MouseEvent.CLICK, onGTSLoadClick);
-		
-		
+				
 		label = new Label(mainContents, 0, 0, "Skeleton");
 		boneTree = new TreeList(mainContents , 0, 0, [SharedModel.skeleton.toList()]);
 		boneTree.alpha = 0.9;
@@ -180,7 +181,7 @@ class ToolBar extends Sprite
 		boneName.addEventListener(Event.CHANGE, onTfChange);
 		boneDepth.addEventListener(Event.CHANGE, onTfChange);
 		sheetPath.addEventListener(Event.CHANGE, onTfChange);
-		charNameField.addEventListener(Event.CHANGE, onTfChange);
+		charNameField.addEventListener(Event.CHANGE, onTfChange);*/
 		
 		gtsFile = new File();
 		gtsFile.addEventListener(Event.SELECT, onGTSSelected);
@@ -228,7 +229,7 @@ class ToolBar extends Sprite
 		}else if (newValue < 0) {
 			newValue = seq.tiles.length - 1;
 		}
-		SharedModel.selection.gtsSequenceFrame = frameStepper.value = newValue;
+		SharedModel.selection.gtsSequenceFrame = cast frameStepper.value = newValue;
 		SharedModel.onChanged.dispatch(SharedModel.BONES, ChangedData.next(SharedModel.selection.boneID));
 	}
 	
@@ -371,7 +372,6 @@ class ToolBar extends Sprite
 	
 	function onDiskopButton(e:Event = null) 
 	{
-		var fr:FileReference;
 		switch(e.currentTarget) {
 			case newButton:
 				SharedModel.clear();
@@ -379,10 +379,10 @@ class ToolBar extends Sprite
 				loadType = CHARACTER;
 				loadFR.browse([new FileFilter("Character file", "*.char")]);
 			case saveButton:
-				fr = new FileReference();
+				var fr = new FileReference();
 				fr.save(SharedModel.serialize(), SharedModel.characterName + ".char");
 			case exportButton:
-				fr = new FileReference();
+				var fr = new FileReference();
 				fr.save(SharedModel.export(), SharedModel.characterName + ".anims");
 		}
 	}

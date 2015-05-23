@@ -7,6 +7,10 @@ import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.geom.Matrix;
 import flash.geom.Point;
+import flash.Vector;
+
+using extensions.ArrayUtils;
+
 /**
  * ...
  * @author Andreas Rønning
@@ -19,12 +23,13 @@ class TileRenderer extends Sprite
 	var lastDraw:Int = -1;
 	public function new() 
 	{
+		super();
 		SharedModel.onChanged.add(onModelChanged);
 	}
 	
 	function onModelChanged(flags:Int, data:Dynamic) 
 	{
-		if (flags & SharedModel.ANIMATION) redraw();
+		if (flags & SharedModel.ANIMATION != 0) redraw();
 	}
 	
 	function redraw() 
@@ -48,20 +53,22 @@ class TileRenderer extends Sprite
 	function renderStack() 
 	{
 		if (SharedModel.gts == null) return;
-		var verts:Array<Float> = new Array<Float>();
-		var indices:Array<Int> = new Array<Int>();
-		var uvs:Array<Float> = new Array<Float>();
+		var verts = new Array<Float>();
+		var indices = new Array<Int>();
+		var uvs = new Array<Float>();
 		indexOffset = 0;
 		for (item in drawStack) 
 		{
 			verts = verts.concat(item.vertices);
-			indices.push(0 + indexOffset, 1 + indexOffset, 2 + indexOffset, 0 + indexOffset, 2 + indexOffset, 3 + indexOffset);
+			indices = indices.concat([0 + indexOffset, 1 + indexOffset, 2 + indexOffset, 0 + indexOffset, 2 + indexOffset, 3 + indexOffset]);
 			uvs = uvs.concat(item.uvs);
 			indexOffset += 4;
 		}
 		graphics.clear();
 		graphics.beginBitmapFill(SharedModel.gts.getTexture(), null, false, true);
-		graphics.drawTriangles(verts, indices, uvs);
+		
+		
+		graphics.drawTriangles(verts.toVector(), indices.toVector(), uvs.toVector());
 		graphics.endFill();
 	}
 	
