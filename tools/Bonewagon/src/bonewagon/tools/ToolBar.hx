@@ -3,6 +3,7 @@ import bonewagon.model.gts.GTSSheet;
 import bonewagon.model.gts.Sequence;
 import bonewagon.model.SharedModel;
 import bonewagon.model.skeleton.Bone;
+import bonewagon.model.skeleton.Skeleton;
 import bonewagon.utils.ComponentFactory;
 import com.furusystems.fl.gui.Button;
 import com.furusystems.fl.gui.compound.Dropdown;
@@ -96,7 +97,7 @@ class ToolBar extends Sprite
 	
 	function onModelChange(flags:Int, data:Dynamic) 
 	{
-		//if (flags & SharedModel.STRUCTURE != 0 || flags & SharedModel.META != 0) boneTree.items = [SharedModel.skeleton.toList()];
+		if (flags & SharedModel.STRUCTURE != 0 || flags & SharedModel.META != 0) boneTree.setData(cast SharedModel.skeleton);
 		if (flags & SharedModel.META != 0 ||  flags & SharedModel.SELECTION != 0) {
 			if(SharedModel.skeleton.selectedBone!=null){
 				boneName.text = SharedModel.skeleton.selectedBone.name;
@@ -161,13 +162,14 @@ class ToolBar extends Sprite
 				
 		label = mainContents.add(new Label("Skeleton"));
 		
-		var vp = new Viewport(new Rectangle(0, 0, stage.stageWidth-10, 120));
-		vp.setContent( { var l = new Loader(); l.load(new URLRequest("http://www.rockpapershotgun.com/images/15/may/tie4.jpg")); l; } );
+		var vp = new Viewport(new Rectangle(0, 0, stage.stageWidth-10, 240));
 		mainContents.addChild(vp);
 		
-		//boneTree = new TreeList(mainContents , 0, 0, [SharedModel.skeleton.toList()]);
-		//boneTree.alpha = 0.9;
-		//boneTree.setSize(290, 100);
+		boneTree = new TreeView();
+		SharedModel.skeleton.buildDummyData();
+		
+		boneTree.setData(cast SharedModel.skeleton);
+		vp.setContent(boneTree);
 		//boneTree.addEventListener(Event.SELECT, handleTestTreeSelect);
 		
 		hbox = mainContents.add(new HBox());

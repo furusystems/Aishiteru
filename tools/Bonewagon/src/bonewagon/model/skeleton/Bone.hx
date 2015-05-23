@@ -1,12 +1,8 @@
 package bonewagon.model.skeleton;
 import bonewagon.model.animation.SRT;
-import bonewagon.model.gts.GTSMap;
-import bonewagon.model.gts.GTSSheet;
-import bonewagon.model.gts.Sequence;
 import bonewagon.model.SharedModel;
 import flash.geom.Matrix;
 import flash.geom.Point;
-import flash.utils.ByteArray;
 /**
  * ...
  * @author Andreas Rønning
