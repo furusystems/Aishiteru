@@ -20,7 +20,7 @@ set APP_DIR=bin
 set FILE_OR_DIR=-C %APP_DIR% .
 
 :: Your application ID (must match <id> of Application descriptor)
-set APP_ID=com.furusystems.games.editors.Bonewagon
+set APP_ID=bonewagon.BonewagonHX
 
 :: Output
 set AIR_PATH=air

@@ -3,8 +3,8 @@ import bonewagon.model.animation.Animation;
 import bonewagon.model.SharedModel;
 import bonewagon.tools.clips.ClipView;
 import com.furusystems.fl.gui.Button;
-import com.furusystems.fl.gui.HBox;
-import com.furusystems.fl.gui.VBox;
+import com.furusystems.fl.gui.layouts.HBox;
+import com.furusystems.fl.gui.layouts.VBox;
 import flash.desktop.NativeApplication;
 import flash.display.NativeWindow;
 import flash.display.NativeWindowInitOptions;
@@ -26,8 +26,9 @@ class AnimationPalette extends Sprite
 	
 	public var clipViews:Array<ClipView>;
 	
-	public function AnimationPalette() 
+	public function new() 
 	{
+		super();
 		var options:NativeWindowInitOptions = new NativeWindowInitOptions();
 		nw = new NativeWindow(options);
 		nw.title = "Clips";

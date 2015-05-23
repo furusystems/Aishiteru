@@ -16,6 +16,7 @@ import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
+import flash.Lib;
 import flash.ui.Keyboard;
 
 using Lambda;
@@ -42,11 +43,19 @@ class Main extends Sprite
 	static var backgroundColors:Array<Int> = [0x333333, 0xFFFFFF, 0, 0x00FF00];
 	
 	public static function main() {
-		new Main();
+		Lib.current.stage.addChild(new Main());
 	}
 	
-	public function Main() 
+	public function new() 
 	{
+		super();
+		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+	}
+	
+	private function onAddedToStage(e:Event):Void 
+	{
+		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		
 		stage.nativeWindow.addEventListener(Event.CLOSING, onWindowClosing);
 		
 		stage.align = StageAlign.TOP_LEFT;

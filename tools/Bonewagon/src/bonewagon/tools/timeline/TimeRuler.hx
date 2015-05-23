@@ -14,8 +14,9 @@ class TimeRuler extends Sprite
 	public var current:TextField;
 	public var mouse:TextField;
 	
-	public function TimeRuler() 
+	public function new() 
 	{
+		super();
 		var tf:TextFormat = new TextFormat("_sans", 10, 0xbbbbbb);
 		var t2:TextFormat = new TextFormat("_sans", 10, 0xbbbbbb,null,null,null,null,null,TextFormatAlign.RIGHT);
 		var t3:TextFormat = new TextFormat("_sans", 10, 0xbbbbbb,null,null,null,null,null,TextFormatAlign.CENTER);

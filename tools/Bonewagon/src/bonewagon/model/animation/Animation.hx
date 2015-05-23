@@ -241,13 +241,12 @@ class Animation
 	public function validate() 
 	{
 		var dirty:Bool = false;
-		var i = 0;
-		while(i++ < targets.length)
+		var i = targets.length;
+		while(i-- > 0)
 		{
 			var t:AnimationTarget = targets[i];
 			if (SharedModel.skeleton.allBones[t.boneID] == null) {
 				targets.splice(i, 1);
-				i--;
 				dirty = true;
 			}
 		}

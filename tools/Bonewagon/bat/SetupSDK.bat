@@ -1,7 +1,7 @@
 :user_configuration
 
 :: Path to Flex SDK
-set FLEX_SDK=c:\Program Files (x86)\FlashDevelop\Tools\flexsdk
+set FLEX_SDK=C:\Users\Lovecraft\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
 
 
 :validation
@@ -19,4 +19,3 @@ exit
 
 :succeed
 set PATH=%PATH%;%FLEX_SDK%\bin
-

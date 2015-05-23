@@ -1,6 +1,4 @@
 package bonewagon.tools;
-import bonewagon.model.gts.GTSFormatter;
-import bonewagon.model.gts.GTSMap;
 import bonewagon.model.gts.GTSSheet;
 import bonewagon.model.gts.Sequence;
 import bonewagon.model.SharedModel;
@@ -9,12 +7,16 @@ import bonewagon.utils.ComponentFactory;
 import com.furusystems.fl.gui.Button;
 import com.furusystems.fl.gui.compound.Dropdown;
 import com.furusystems.fl.gui.compound.Stepper;
-import com.furusystems.fl.gui.compound.treeview.TreeView;
-import com.furusystems.fl.gui.HBox;
+import com.furusystems.fl.gui.compound.Viewport;
+import com.furusystems.fl.gui.layouts.AbstractLayout;
+import com.furusystems.fl.gui.layouts.DBox;
+import com.furusystems.fl.gui.layouts.treeview.TreeView;
+import com.furusystems.fl.gui.Divider;
 import com.furusystems.fl.gui.Label;
-import com.furusystems.fl.gui.VBox;
+import com.furusystems.fl.gui.layouts.HBox;
+import com.furusystems.fl.gui.layouts.VBox;
 import flash.desktop.NativeApplication;
-import flash.display.DisplayObjectContainer;
+import flash.display.Loader;
 import flash.display.NativeWindow;
 import flash.display.NativeWindowInitOptions;
 import flash.display.Sprite;
@@ -24,12 +26,10 @@ import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.filesystem.File;
-import flash.filesystem.FileMode;
-import flash.filesystem.FileStream;
+import flash.geom.Rectangle;
 import flash.net.FileFilter;
 import flash.net.FileReference;
-import flash.ui.Keyboard;
-import flash.utils.ByteArray;
+import flash.net.URLRequest;
 /**
  * ...
  * @author Andreas Rønning
@@ -39,7 +39,7 @@ class ToolBar extends Sprite
 	/*[Embed(source = "../../../../../../bin/assets/glottis01.png")]
 	static var Glottis:Class;*/
 	
-	var mainContents:VBox;
+	var mainContents:AbstractLayout;
 	var newButton:Button;
 	var loadButton:Button;
 	var saveButton:Button;
@@ -63,8 +63,9 @@ class ToolBar extends Sprite
 	static inline var CHARACTER:Int = 0;
 	static inline var ANIMATIONS:Int = 1;
 	
-	public function ToolBar() 
+	public function new() 
 	{
+		super();
 		var options:NativeWindowInitOptions = new NativeWindowInitOptions();
 		nw = new NativeWindow(options);
 		nw.title = "Tools";
@@ -126,36 +127,54 @@ class ToolBar extends Sprite
 					frameStepper.value = SharedModel.selection.gtsSequenceFrame;
 				}
 			}
-			sheetPath.text = SharedModel.gtsPath;
-			charNameField.text = SharedModel.characterName;
+			//sheetPath.text = SharedModel.gtsPath;
+			//charNameField.text = SharedModel.characterName;
 		}
 	}
 	
 	function buildUI() 
 	{
-		/*mainContents = new VBox(stage,4,4);
-		charNameField = ComponentFactory.labelledLabel("Name: ", mainContents);
-		var label:Label = new Label(mainContents, 0, 0, "DiskOps");
-		var hbox:HBox = new HBox(mainContents);
-		newButton = new Button(hbox, 0, 0, "New", onDiskopButton);
-		loadButton = new Button(hbox, 0, 0, "Load", onDiskopButton);
-		saveButton = new Button(hbox, 0, 0, "Save", onDiskopButton);
-		exportButton = new Button(hbox, 0, 0, "Export", onDiskopButton);
-		//importButton = new Button(hbox, 0, 0, "Import", onDiskopButton);
-		newButton.width = loadButton.width = saveButton.width = 50;
+		mainContents = new VBox();
+		addChild(mainContents);
+		mainContents.x = mainContents.y = 4;
 		
-		hbox = new HBox(mainContents);
+		mainContents.add(new Divider(stage.stageWidth, HORIZONTAL, 5));
+		
+		charNameField = ComponentFactory.labelledLabel("Name: ", mainContents, true);
+
+		var label = mainContents.add(new Label("DiskOps"));
+		var dbox = mainContents.add(new DBox());
+		newButton = dbox.add(new Button("New"));
+		loadButton = dbox.add(new Button("Load"));
+		saveButton = dbox.add(new Button("Save"));
+		exportButton = dbox.add(new Button("Export"));
+		newButton.width = loadButton.width = saveButton.width = 50;
+		dbox.length = stage.stageWidth-20;
+		
+		mainContents.add(new Divider(stage.stageWidth, HORIZONTAL, 5));
+		
+		var hbox = mainContents.add(new HBox());
+		hbox.add(new Button("load")).addEventListener(MouseEvent.CLICK, onGTSLoadClick);
 		sheetPath = ComponentFactory.labelledLabel("GTS Sheet path: ", hbox);
-		new Button(hbox, 0, 0, "load").addEventListener(MouseEvent.CLICK, onGTSLoadClick);
+		
+		mainContents.add(new Divider(stage.stageWidth, HORIZONTAL, 5));
 				
-		label = new Label(mainContents, 0, 0, "Skeleton");
-		boneTree = new TreeList(mainContents , 0, 0, [SharedModel.skeleton.toList()]);
-		boneTree.alpha = 0.9;
-		boneTree.setSize(290, 100);
-		boneTree.addEventListener(Event.SELECT, handleTestTreeSelect);
-		hbox = new HBox(mainContents);
-		new Button(hbox, 0, 0, "+").addEventListener(MouseEvent.CLICK, onAddBoneButton);
-		new Button(hbox, 0, 0, "-").addEventListener(MouseEvent.CLICK, onRemoveBoneButton);
+		label = mainContents.add(new Label("Skeleton"));
+		
+		var vp = new Viewport(new Rectangle(0, 0, stage.stageWidth-10, 120));
+		vp.setContent( { var l = new Loader(); l.load(new URLRequest("http://www.rockpapershotgun.com/images/15/may/tie4.jpg")); l; } );
+		mainContents.addChild(vp);
+		
+		//boneTree = new TreeList(mainContents , 0, 0, [SharedModel.skeleton.toList()]);
+		//boneTree.alpha = 0.9;
+		//boneTree.setSize(290, 100);
+		//boneTree.addEventListener(Event.SELECT, handleTestTreeSelect);
+		
+		hbox = mainContents.add(new HBox());
+		hbox.add(new Button("+")).addEventListener(MouseEvent.CLICK, onAddBoneButton);
+		hbox.add(new Button("-")).addEventListener(MouseEvent.CLICK, onRemoveBoneButton);
+		
+		/*
 		
 		label = new Label(mainContents, 0, 0, "Bone");
 		boneName = ComponentFactory.labelledLabel("Name: ", mainContents);
@@ -181,10 +200,12 @@ class ToolBar extends Sprite
 		boneName.addEventListener(Event.CHANGE, onTfChange);
 		boneDepth.addEventListener(Event.CHANGE, onTfChange);
 		sheetPath.addEventListener(Event.CHANGE, onTfChange);
-		charNameField.addEventListener(Event.CHANGE, onTfChange);*/
+		charNameField.addEventListener(Event.CHANGE, onTfChange);
 		
 		gtsFile = new File();
 		gtsFile.addEventListener(Event.SELECT, onGTSSelected);
+		
+		*/
 	}
 	
 	function onOffsetChange(e:Event) 
