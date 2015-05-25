@@ -5,7 +5,7 @@ import flash.errors.Error;
 import flash.utils.ByteArray;
 import flash.utils.IDataInput;
 
-using extensions.PNGTools;
+using com.furusystems.games.extensions.PNGTools;
 /**
  * ...
  * @author Andreas Rønning

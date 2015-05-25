@@ -1,4 +1,4 @@
-package extensions;
+package com.furusystems.games.extensions;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.io.Bytes;

@@ -5,7 +5,7 @@ import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 import haxe.Json;
 
-using extensions.PNGTools;
+using com.furusystems.games.extensions.PNGTools;
 /**
  * ...
  * @author Andreas Rønning

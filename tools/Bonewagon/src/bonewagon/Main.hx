@@ -20,7 +20,7 @@ import flash.Lib;
 import flash.ui.Keyboard;
 
 using Lambda;
-using extensions.ArrayUtils;
+using com.furusystems.games.extensions.ArrayUtils;
 
 /**
  * ...

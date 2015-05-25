@@ -8,7 +8,7 @@ import flash.display.BitmapData;
 import flash.geom.Matrix;
 import flash.geom.Point;
 
-using extensions.ArrayUtils;
+using com.furusystems.games.extensions.ArrayUtils;
 
 /**
  * ...

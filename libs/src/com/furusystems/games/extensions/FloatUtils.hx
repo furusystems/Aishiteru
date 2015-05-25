@@ -1,4 +1,4 @@
-package extensions;
+package com.furusystems.games.extensions;
 
 /**
  * ...

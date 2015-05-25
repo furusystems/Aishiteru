@@ -14,7 +14,7 @@ import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import flash.ui.Keyboard;
 
-using extensions.Transformations;
+using com.furusystems.games.extensions.Transformations;
 /**
  * ...
  * @author Andreas Rønning

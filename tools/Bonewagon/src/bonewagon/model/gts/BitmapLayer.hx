@@ -14,7 +14,7 @@ import fsignal.Signal;
 import fsignal.Signal1;
 import haxe.Json;
 
-using extensions.PNGTools;
+using com.furusystems.games.extensions.PNGTools;
 /**
  * ...
  * @author Andreas Rønning

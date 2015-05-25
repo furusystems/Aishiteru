@@ -9,7 +9,7 @@ import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.Vector;
 
-using extensions.ArrayUtils;
+using com.furusystems.games.extensions.ArrayUtils;
 
 /**
  * ...

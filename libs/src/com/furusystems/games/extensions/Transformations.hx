@@ -1,4 +1,4 @@
-package extensions;
+package com.furusystems.games.extensions;
 import flash.geom.Matrix;
 import flash.geom.Point;
 /**

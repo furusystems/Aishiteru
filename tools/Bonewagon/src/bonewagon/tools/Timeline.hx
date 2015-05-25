@@ -30,7 +30,7 @@ import flash.geom.Rectangle;
 import flash.ui.Keyboard;
 import flash.ui.Mouse;
 
-using extensions.FloatUtils;
+using com.furusystems.games.extensions.FloatUtils;
 /**
  * ...
  * @author Andreas Rønning
