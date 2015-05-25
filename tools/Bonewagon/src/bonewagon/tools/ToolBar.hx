@@ -172,7 +172,6 @@ class ToolBar extends Sprite
 		mainContents.addChild(vp);
 		
 		boneTree = new TreeView<Bone>();
-		//SharedModel.skeleton.buildDummyData();
 		
 		boneTree.setData(SharedModel.skeleton);
 		vp.setContent(boneTree);
@@ -181,14 +180,16 @@ class ToolBar extends Sprite
 		hbox = mainContents.add(new HBox());
 		hbox.add(new Button("+")).addEventListener(MouseEvent.CLICK, onAddBoneButton);
 		hbox.add(new Button("-")).addEventListener(MouseEvent.CLICK, onRemoveBoneButton);
-			
+		
+		mainContents.add(new Divider(stage.stageWidth, HORIZONTAL, 5));
 		label = mainContents.add(new Label("Bone"));
-		boneName = ComponentFactory.labelledLabel("Name: ", mainContents);
+		boneName = ComponentFactory.labelledLabel("Name: ", mainContents, true);
 		boneDepth = ComponentFactory.labelledStepper("Z: ", mainContents);
 		hbox = mainContents.add(new HBox());
 		hbox.add(new Button("Flip X")).addEventListener(MouseEvent.CLICK,flipX);
 		hbox.add(new Button("Flip Y")).addEventListener(MouseEvent.CLICK,flipY);
 		
+		mainContents.add(new Divider(stage.stageWidth, HORIZONTAL, 5));
 		hbox = mainContents.add(new HBox());
 		sequenceList = hbox.add(new Dropdown(80, 20, "No GTS loaded"));
 		//sequenceList.addEventListener(Event.SELECT, onSequenceSelect);
