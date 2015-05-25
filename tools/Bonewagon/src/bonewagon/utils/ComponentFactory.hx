@@ -1,4 +1,5 @@
 package bonewagon.utils;
+import com.furusystems.fl.gui.compound.Stepper;
 import com.furusystems.fl.gui.Label;
 import com.furusystems.fl.gui.layouts.HBox;
 import flash.display.DisplayObjectContainer;
@@ -20,12 +21,12 @@ class ComponentFactory
 		hbox.add(t);
 		return t;
 	}
-	public static function labelledStepper(label:String, container:DisplayObjectContainer):Sprite {
+	public static function labelledStepper(label:String, container:DisplayObjectContainer):Stepper {
 		var hbox = new HBox();
 		container.addChild(hbox);
-		new Label(label);
-		var stepper = new Sprite();
-		hbox.addChild(stepper);
+		hbox.add(new Label(label));
+		var stepper = new Stepper();
+		hbox.add(stepper);
 		return stepper;
 	}
 	
