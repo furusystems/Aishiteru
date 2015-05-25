@@ -18,8 +18,9 @@ class Manipulator extends Sprite
 {
 	var modes = [ManipulatorMode.TRANSLATE, ManipulatorMode.ROTATE, ManipulatorMode.SCALE];
 	public var mode = ManipulatorMode.TRANSLATE;
-	public function Manipulator() 
+	public function new() 
 	{
+		super();
 		blendMode = BlendMode.INVERT;
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		setMode(mode);

@@ -111,9 +111,9 @@ class ToolBar extends Sprite
 				localOffsetX.value = SharedModel.selection.localOffset.x;
 				localOffsetY.value = SharedModel.selection.localOffset.y;
 				
-				//boneTree.onSelection.remove(handleTreeSelect);
+				boneTree.onSelection.remove(handleTreeSelect);
 				selectBoneByName(SharedModel.selection.name);
-				//boneTree.onSelection.add(handleTreeSelect);
+				boneTree.onSelection.add(handleTreeSelect);
 				
 				if (SharedModel.gts != null) {
 					sheetPath.text = SharedModel.gtsPath;
@@ -385,9 +385,8 @@ class ToolBar extends Sprite
 	}
 	
 	public function selectBoneByName(name:String) {
-		
+		boneTree.selectByName(name);
 		/*
-		
 		var i = boneTree.items.length;
 		while (i-- > 0) 
 		{
@@ -396,8 +395,6 @@ class ToolBar extends Sprite
 				return;
 			}
 		}
-		boneTree.selectedIndex = 0;
-		
 		*/
 	}
 	

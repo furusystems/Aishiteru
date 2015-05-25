@@ -3,6 +3,10 @@ import bonewagon.model.animation.Animation;
 import bonewagon.model.SharedModel;
 import bonewagon.tools.AnimationPalette;
 import bonewagon.utils.ComponentFactory;
+import com.furusystems.fl.gui.Button;
+import com.furusystems.fl.gui.Label;
+import com.furusystems.fl.gui.layouts.HBox;
+import com.furusystems.fl.gui.layouts.VBox;
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -16,10 +20,10 @@ class ClipView extends Sprite
 {
 	var _selected:Bool;
 	var w:Float;
-	//var nameField:Label;
-	//var controls:VBox;
-	//var selectButton:Button;
-	//var deleteButton:Button;
+	var nameField:Label;
+	var controls:VBox;
+	var selectButton:Button;
+	var deleteButton:Button;
 	var owner:AnimationPalette;
 	public var isBasePose:Bool;
 	public var anim:Animation;
@@ -32,23 +36,24 @@ class ClipView extends Sprite
 		this.anim = anim;
 		w = 20;
 		_selected = false;
-		/*
-		controls = new VBox(this);
+		
+		controls = new VBox();
+		addChild(controls);
 		controls.spacing = 0;
 		nameField = ComponentFactory.labelledLabel("Name", controls);
-		nameField.textField.mouseEnabled = !isBasePose;
+		nameField.mouseEnabled = !isBasePose;
 		nameField.text = isBasePose?"BasePose":anim.name;
 		nameField.addEventListener(Event.CHANGE, onNameChange);
 		
-		var buttons:HBox = new HBox(controls);
-		selectButton = new Button(buttons, 0, 0, "Select");
+		var buttons = controls.add(new HBox());
+		selectButton = buttons.add(new Button("Select"));
 		selectButton.addEventListener(MouseEvent.CLICK, onSelect);
 		
 		if(!isBasePose){
-			deleteButton = new Button(buttons, 0, 0, "Delete");
+			deleteButton = buttons.add(new Button("Delete"));
 			deleteButton.doubleClickEnabled = true;
 			deleteButton.addEventListener(MouseEvent.DOUBLE_CLICK, onDelete,false,0,true);
-		}*/
+		}
 		
 	}
 	

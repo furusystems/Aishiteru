@@ -126,7 +126,7 @@ class Timeline extends Sprite
 	}
 	
 	
-	function onModelChanged(flags:Int, data:Dynamic) 
+	function onModelChanged(flags:Int, data:ChangedData) 
 	{
 		if (flags & SharedModel.LOAD != 0||  flags & SharedModel.ANIMATION_LIST != 0) {
 			reinit();
@@ -147,7 +147,7 @@ class Timeline extends Sprite
 			var i = a.targets.length;
 			while(i-- > 0 ) 
 			{
-				if (a.targets[i].boneID == data) {
+				if (a.targets[i].boneID == data.value) {
 					existingTarget = a.targets[i];
 					break;
 				}
@@ -155,13 +155,9 @@ class Timeline extends Sprite
 			if (existingTarget == null) {
 				//no target for bone, creating new
 				existingTarget = new AnimationTarget();
-				existingTarget.boneID = Std.int(data);
+				existingTarget.boneID = Std.int(data.value);
 				a.targets.push(existingTarget);
 				newTargetCreated = true;
-				trace("creating new target"+existingTarget.getBone().name);
-			}else {
-				trace("exisitng target: " + existingTarget.getBone().name);
-				trace(SharedModel.skeleton.allBones);
 			}
 			var b:Bone = SharedModel.skeleton.allBones[existingTarget.boneID];
 			//is there an existing srt at the current time?
@@ -225,7 +221,7 @@ class Timeline extends Sprite
 			v.cname.nameField.text = v.target.getBone().name;
 			v.setSize(stage.stageWidth);
 			channelViews.push(v);
-			channelViewContainer.addChild(v).y = (i++) * 20;
+			channelViewContainer.addChild(v).y = ((i++)+1) * 20;
 		}
 	}
 	
@@ -599,9 +595,7 @@ class Timeline extends Sprite
 		updateTargets();
 	}
 	public function drive() {
-		//if (SharedModel.playback.currentAnimation == null) return;
 		SharedModel.playback.applyAnimations(timeSeconds);
-		//SharedModel.onChanged.dispatch(SharedModel.ANIMATION);
 	}
 	
 	public function createScript() 
