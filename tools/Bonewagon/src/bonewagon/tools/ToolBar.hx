@@ -9,12 +9,12 @@ import com.furusystems.fl.gui.Button;
 import com.furusystems.fl.gui.compound.Dropdown;
 import com.furusystems.fl.gui.compound.Stepper;
 import com.furusystems.fl.gui.compound.Viewport;
+import com.furusystems.fl.gui.Label;
 import com.furusystems.fl.gui.layouts.AbstractLayout;
 import com.furusystems.fl.gui.layouts.DBox;
-import com.furusystems.fl.gui.layouts.treeview.TreeView;
 import com.furusystems.fl.gui.Divider;
-import com.furusystems.fl.gui.Label;
 import com.furusystems.fl.gui.layouts.HBox;
+import com.furusystems.fl.gui.layouts.TreeView;
 import com.furusystems.fl.gui.layouts.VBox;
 import flash.desktop.NativeApplication;
 import flash.display.Loader;
@@ -44,7 +44,7 @@ class ToolBar extends Sprite
 	var newButton:Button;
 	var loadButton:Button;
 	var saveButton:Button;
-	var boneTree:TreeView;
+	var boneTree:TreeView<Bone>;
 	var boneName:Label;
 	var sheetPath:Label;
 	var boneDepth:Stepper;
@@ -60,6 +60,8 @@ class ToolBar extends Sprite
 	var gtsFile:File;
 	var loadType:Int;
 	
+	var uiReady:Bool;
+	
 	public var nw:NativeWindow;
 	static inline var CHARACTER:Int = 0;
 	static inline var ANIMATIONS:Int = 1;
@@ -67,6 +69,7 @@ class ToolBar extends Sprite
 	public function new() 
 	{
 		super();
+		
 		var options:NativeWindowInitOptions = new NativeWindowInitOptions();
 		nw = new NativeWindow(options);
 		nw.title = "Tools";
@@ -84,9 +87,9 @@ class ToolBar extends Sprite
 		loadFR.addEventListener(Event.SELECT, onLoadSelect);
 		loadFR.addEventListener(Event.COMPLETE, onDataLoaded);
 		
-		SharedModel.onChanged.add(onModelChange);
-		
 		buildUI();
+		
+		SharedModel.onChanged.add(onModelChange);
 		
 	}
 	
@@ -97,7 +100,8 @@ class ToolBar extends Sprite
 	
 	function onModelChange(flags:Int, data:Dynamic) 
 	{
-		if (flags & SharedModel.STRUCTURE != 0 || flags & SharedModel.META != 0) boneTree.setData(cast SharedModel.skeleton);
+		if (!uiReady) return;
+		if (flags & SharedModel.STRUCTURE != 0 || flags & SharedModel.META != 0) boneTree.setData(SharedModel.skeleton);
 		if (flags & SharedModel.META != 0 ||  flags & SharedModel.SELECTION != 0) {
 			if(SharedModel.skeleton.selectedBone!=null){
 				boneName.text = SharedModel.skeleton.selectedBone.name;
@@ -107,9 +111,9 @@ class ToolBar extends Sprite
 				localOffsetX.value = SharedModel.selection.localOffset.x;
 				localOffsetY.value = SharedModel.selection.localOffset.y;
 				
-				boneTree.removeEventListener(Event.SELECT, handleTestTreeSelect);
+				//boneTree.onSelection.remove(handleTreeSelect);
 				selectBoneByName(SharedModel.selection.name);
-				boneTree.addEventListener(Event.SELECT, handleTestTreeSelect);
+				//boneTree.onSelection.add(handleTreeSelect);
 				
 				if (SharedModel.gts != null) {
 					sheetPath.text = SharedModel.gtsPath;
@@ -124,24 +128,27 @@ class ToolBar extends Sprite
 						}
 						
 					}
-					//sequenceList.selectedIndex = idx;
+					sequenceList.selectedIndex = idx;
 					frameStepper.value = SharedModel.selection.gtsSequenceFrame;
 				}
 			}
-			//sheetPath.text = SharedModel.gtsPath;
-			//charNameField.text = SharedModel.characterName;
+			sheetPath.text = SharedModel.gtsPath;
+			charNameField.text = SharedModel.characterName;
 		}
 	}
 	
 	function buildUI() 
 	{
+		
 		mainContents = new VBox();
-		addChild(mainContents);
 		mainContents.x = mainContents.y = 4;
+		
+		addChild(mainContents);
 		
 		mainContents.add(new Divider(stage.stageWidth, HORIZONTAL, 5));
 		
 		charNameField = ComponentFactory.labelledLabel("Name: ", mainContents, true);
+		
 
 		var label = mainContents.add(new Label("DiskOps"));
 		var dbox = mainContents.add(new DBox());
@@ -151,7 +158,6 @@ class ToolBar extends Sprite
 		exportButton = dbox.add(new Button("Export"));
 		newButton.width = loadButton.width = saveButton.width = 50;
 		dbox.length = stage.stageWidth-20;
-		
 		mainContents.add(new Divider(stage.stageWidth, HORIZONTAL, 5));
 		
 		var hbox = mainContents.add(new HBox());
@@ -162,52 +168,50 @@ class ToolBar extends Sprite
 				
 		label = mainContents.add(new Label("Skeleton"));
 		
-		var vp = new Viewport(new Rectangle(0, 0, stage.stageWidth-10, 240));
+		var vp = new Viewport(stage.stageWidth-10, 240);
 		mainContents.addChild(vp);
 		
-		boneTree = new TreeView();
-		SharedModel.skeleton.buildDummyData();
+		boneTree = new TreeView<Bone>();
+		//SharedModel.skeleton.buildDummyData();
 		
-		boneTree.setData(cast SharedModel.skeleton);
+		boneTree.setData(SharedModel.skeleton);
 		vp.setContent(boneTree);
-		//boneTree.addEventListener(Event.SELECT, handleTestTreeSelect);
+		boneTree.onSelection.add(handleTreeSelect);
 		
 		hbox = mainContents.add(new HBox());
 		hbox.add(new Button("+")).addEventListener(MouseEvent.CLICK, onAddBoneButton);
 		hbox.add(new Button("-")).addEventListener(MouseEvent.CLICK, onRemoveBoneButton);
-		
-		/*
-		
-		label = new Label(mainContents, 0, 0, "Bone");
+			
+		label = mainContents.add(new Label("Bone"));
 		boneName = ComponentFactory.labelledLabel("Name: ", mainContents);
 		boneDepth = ComponentFactory.labelledStepper("Z: ", mainContents);
-		hbox = new HBox(mainContents);
-		new Button(hbox, 0, 0, "Flip X").addEventListener(MouseEvent.CLICK,flipX);
-		new Button(hbox, 0, 0, "Flip Y").addEventListener(MouseEvent.CLICK,flipY);
+		hbox = mainContents.add(new HBox());
+		hbox.add(new Button("Flip X")).addEventListener(MouseEvent.CLICK,flipX);
+		hbox.add(new Button("Flip Y")).addEventListener(MouseEvent.CLICK,flipY);
 		
-		hbox = new HBox(mainContents);
-		sequenceList = new Dropdown(hbox, 0, 0, "No GTS loaded");
-		sequenceList.addEventListener(Event.SELECT, onSequenceSelect);
-		frameStepper = new Stepper(hbox, 0, 0, onSequenceStep);
-		hbox = new HBox(mainContents);
-		label = new Label(hbox, 0, 0, "X offset");
-		localOffsetX = new Stepper(hbox, 0, 0, onOffsetChange);
-		hbox = new HBox(mainContents);
-		label = new Label(hbox, 0, 0, "Y offset");
-		localOffsetY = new Stepper(hbox, 0, 0, onOffsetChange);
+		hbox = mainContents.add(new HBox());
+		sequenceList = hbox.add(new Dropdown(80, 20, "No GTS loaded"));
+		//sequenceList.addEventListener(Event.SELECT, onSequenceSelect);
+		frameStepper = hbox.add(new Stepper()); //onSequenceStep
+		hbox = mainContents.add(new HBox());
+		label = hbox.add(new Label("X offset"));
+		localOffsetX = hbox.add(new Stepper()); //onOffsetChange
+		hbox = mainContents.add(new HBox());
+		label = hbox.add(new Label("Y offset"));
+		localOffsetY = hbox.add(new Stepper()); //onOffsetChange
 		
-		label = new Label(mainContents, 0, 0, "Animation");
-		label = new Label(mainContents, 0, 0, "Meta");
+		label = mainContents.add(new Label("Animation"));
+		label = mainContents.add(new Label("Meta"));
 		
-		boneName.addEventListener(Event.CHANGE, onTfChange);
-		boneDepth.addEventListener(Event.CHANGE, onTfChange);
-		sheetPath.addEventListener(Event.CHANGE, onTfChange);
-		charNameField.addEventListener(Event.CHANGE, onTfChange);
+		//boneName.addEventListener(Event.CHANGE, onTfChange);
+		//boneDepth.addEventListener(Event.CHANGE, onTfChange);
+		//sheetPath.addEventListener(Event.CHANGE, onTfChange);
+		//charNameField.addEventListener(Event.CHANGE, onTfChange);
 		
 		gtsFile = new File();
 		gtsFile.addEventListener(Event.SELECT, onGTSSelected);
 		
-		*/
+		uiReady = true;
 	}
 	
 	function onOffsetChange(e:Event) 
@@ -287,10 +291,10 @@ class ToolBar extends Sprite
 		
 		populateGTS();
 		
-		//sequenceList.selectedIndex = 0;
-		var allBones:Array<Bone> = SharedModel.skeleton.listBones();
+		sequenceList.selectedIndex = 0;
+		var allBones = SharedModel.skeleton.listBones();
 		while (allBones.length > 0) {
-			var b:Bone = allBones.pop();
+			var b = allBones.pop();
 			b.gtsSequence = "n/a";
 			b.gtsSequenceFrame = 0;
 		}
@@ -298,21 +302,19 @@ class ToolBar extends Sprite
 	
 	public function populateGTS() 
 	{
-		/*
-		sequenceList.removeAll();
-		sequenceList.addItem( { label:"n/a" } );
+		sequenceList.clear();
+		sequenceList.addItem( "n/a" );
 		if (SharedModel.gts == null) return;
 		for (seq in SharedModel.gts.sequences) 
 		{
-			sequenceList.addItem( { label:seq.name } );
+			sequenceList.addItem( seq.name );
 		}
-		*/
 	}
 	
 	function onSequenceSelect(e:Event) 
 	{
 		if (SharedModel.skeleton.selectedBone == null) return;
-		//SharedModel.selection.gtsSequence = sequenceList.selectedItem.label;
+		SharedModel.selection.gtsSequence = sequenceList.selectedItem;
 		SharedModel.selection.inheritOffset();
 		SharedModel.onChanged.dispatch(SharedModel.ANIMATION | SharedModel.BONES, ChangedData.next(SharedModel.selection.boneID));
 	}
@@ -352,12 +354,11 @@ class ToolBar extends Sprite
 		}*/
 	}
 	
-	function handleTestTreeSelect(e:Event)
+	function handleTreeSelect(item:Bone)
 	{
-		var item = e.target.selectedItem;
 		if (item == null) return;
-		trace('TreeList select:', item.label, item.bone);
-		SharedModel.skeleton.selectedBone = item.bone;
+		trace('TreeList select:', item.name, item);
+		SharedModel.skeleton.selectedBone = item;
 		SharedModel.onChanged.dispatch(SharedModel.SELECTION, ChangedData.next(SharedModel.selection.boneID));
 	}
 	

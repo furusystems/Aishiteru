@@ -27,8 +27,9 @@ class Playback
 	}
 	
 	
-	public function applyAnimations(timeSeconds) 
+	public function applyAnimations(timeSeconds:Float) 
 	{
+		if (currentAnimation == null) return;
 		//list valid animations
 		//var animations:Array<Animation> = new Array<Animation>();
 		//SharedModel.basePose.apply(0, false);

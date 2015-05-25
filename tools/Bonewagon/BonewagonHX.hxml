@@ -6,6 +6,6 @@
 -lib fsignal
 -cp src
 -swf bin/BonewagonHX.swf
--swf-header 800:600:30:FFFFFF
+-swf-header 800:600:120:FFFFFF
 -swf-version 17.0
 -main bonewagon.Main

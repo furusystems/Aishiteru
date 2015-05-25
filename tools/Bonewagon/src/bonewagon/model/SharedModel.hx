@@ -78,6 +78,7 @@ class SharedModel
 	public static function set_selection(b:Bone) {
 		return skeleton.selectedBone = b;
 	}
+	
 	public static function clear() {
 		characterName = "Character";
 		Bone.uidPool = 0;

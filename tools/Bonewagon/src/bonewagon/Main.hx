@@ -87,9 +87,6 @@ class Main extends Sprite
 		addChild(zeroZoomButton);
 		zeroZoomButton.addEventListener(MouseEvent.CLICK, zeroZoom);
 		
-		SharedModel.clear();
-		SharedModel.onChanged.add(onModelChanged);
-		
 		#if debug
 		timeLine.populate(SharedModel.playback.currentAnimation);
 		#end
@@ -98,6 +95,9 @@ class Main extends Sprite
 		stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		background.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onMouseDown);
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		
+		SharedModel.clear();
+		SharedModel.onChanged.add(onModelChanged);
 		
 	}
 	
