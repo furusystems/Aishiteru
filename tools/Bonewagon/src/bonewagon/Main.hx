@@ -18,6 +18,8 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.Lib;
 import flash.ui.Keyboard;
+import haxe.Log;
+import haxe.PosInfos;
 
 using Lambda;
 using com.furusystems.games.extensions.ArrayUtils;
@@ -43,6 +45,7 @@ class Main extends Sprite
 	static var backgroundColors:Array<Int> = [0x333333, 0xFFFFFF, 0, 0x00FF00];
 	
 	public static function main() {
+		Log.trace = function(a:Dynamic, ?b:PosInfos) Lib.trace(a);
 		Lib.current.stage.addChild(new Main());
 	}
 	

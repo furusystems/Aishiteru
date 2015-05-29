@@ -24,4 +24,8 @@ class Playback
 		
 	}
 	
+	public function step(delta:Float) {
+		time += delta;
+	}
+	
 }

@@ -1,43 +1,49 @@
 package levelord.model;
 
+import flash.geom.Matrix3D;
+import flash.geom.Point;
 import flash.utils.ByteArray;
+import fsignal.Signal1;
+import fsignal.Signal2;
 import levelord.model.animation.Playback;
-import levelord.model.SharedModel.ChangedData;
+import levelord.model.objects.EventBlock;
+import levelord.model.objects.WorldSpline;
+import flash.geom.Matrix3D;
 
 /**
  * ...
  * @author Andreas Rønning
  */
 
-class ChangedData {
-	public var value:Dynamic;
-	function new(?value:Dynamic) {
-		this.value = value;
-	}
-	static var instance = new ChangedData();
-	public static function next(?value:Dynamic):ChangedData {
-		instance.value = value;
-		return instance;
-	}
-}
  
+enum ModelUpdate {
+	ALL;
+	BLOCK(?data:EventBlock); 					//when a sequence block is translated or scaled or its spline altered
+	TIME(?data:Float);							//when the playhead moves
+	CAMERA(world:Matrix3D, worldInv:Matrix3D); 	//when the camera translates
+}
+
 class SharedModel 
 {
-	public static inline var STRUCTURE:Int = 2; //when skeleton structure is changed
-	public static inline var BONES:Int = 4;  //When bones are transformed
-	public static inline var META:Int = 8; //When bone metadata is changed
-	public static inline var SELECTION:Int = 16; //When selections are made
-	public static inline var ANIMATION:Int = 32; //When the timeline moves
-	public static inline var CAMERA:Int = 64; //When the camera moves
-	public static inline var LOAD:Int = 128; //When a file is loaded
-	public static inline var ANIMATION_LIST:Int = 256; //When the list of animations change
-	static public inline var ANIMATION_WEIGHT:Int = 512;
-	
-	public static var ALL:Int = 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512;
 	
 	public static var playback = new Playback();
 	
-	public static function clear() {
+	public static var onChanged = new Signal1<ModelUpdate>();
+	
+	public static var zoom:Float;
+	public static var worldMatrix:Matrix3D;
+	public static var worldMatrixInverse:Matrix3D;
+	public static var cameraPos:Point;
+	
+	public static var blocks:Array<EventBlock>;
+	
+	public static function init() {
+		zoom = 1.0;
+		worldMatrix = new Matrix3D();
+		worldMatrixInverse = new Matrix3D();
+		cameraPos = new Point();
+		blocks = [];
+		onChanged.dispatch(ALL);
 	}
 	
 	public static function export():ByteArray {
@@ -46,19 +52,20 @@ class SharedModel
 	}
 	
 	public static function serialize():String {
-		return ""
+		return "";
 	}
 	
 	public static function load(s:String) {
+		onChanged.dispatch(ALL);
 	}
 	
 	static public function updateWorld() 
 	{
 		worldMatrix.identity();
-		worldMatrix.scale(SharedModel.zoom, SharedModel.zoom);
-		worldMatrix.translate(cameraPos.x, cameraPos.y);
-		worldMatrixInverse.copyFrom(SharedModel.worldMatrix);
+		worldMatrix.appendScale(zoom, zoom, zoom);
+		worldMatrix.appendTranslation(cameraPos.x, cameraPos.y, 0);
+		worldMatrixInverse.copyFrom(worldMatrix);
 		worldMatrixInverse.invert();
-		onChanged.dispatch(SharedModel.CAMERA, null);
+		onChanged.dispatch(CAMERA(worldMatrix, worldMatrixInverse));
 	}
 }

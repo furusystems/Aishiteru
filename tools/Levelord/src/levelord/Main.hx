@@ -3,6 +3,7 @@ import flash.desktop.NativeApplication;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
+import levelord.model.SharedModel;
 
 using Lambda;
 
@@ -25,7 +26,7 @@ class Main extends Sprite
 	
 	private function onAddedToStage(e:Event):Void 
 	{
-	
+		SharedModel.init();
 	}
 	
 	function onWindowClosing(e:Event) 
